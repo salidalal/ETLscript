@@ -1,15 +1,105 @@
+#!/usr/bin/env python
+
+from datetime import datetime
+import pandas as pd
+import xlwt
+import numpy as np
+import functools
+import ETLscrtipFuncs
+
+#defines
+months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+          "November", "December"]
+format = '%Y-%m-%d %H:%M:%S'
+ErrorFormat = '%d/%m/%Y %H:%M:%S'
+fix = "None"
+etls = []
+start = -1
+fail = False
+
+
+
+
+
+#reading files
+exeLOG = pd.read_excel('Execution Log.xlsx', sheet_name='Sheet1')
+log = open("ETL.log", 'r')
+CheckApps = open("CheckApps.txt", "r").readlines()
+setupDWH = open("SetupDWH.root.log", "r").readlines()
+ErrorLog = pd.read_excel('ETL Error Log_ETL Error Log.xlsx', sheet_name="ETL Error Log")
 
 
 
 
 
 
+#retrieve
+dwh = CheckApps[3].split()[2][1:-1]
+ver = CheckApps[9].split()[1]
 
-log = xlwt.Workbook(encoding="utf-8")
-sheet1 = log.add_sheet("Last ETL process")
-sheet2 = log.add_sheet("statistics")
+for line in CheckApps:
+    if "fix" in line.lower():
+        fix = line.split()[1]
+        break
+
+
+for line in setupDWH:
+    if "Host name:" in line:
+        obi = line.split()[2]
+        break
+
+
+msg = exeLOG.values.T[3].tolist()[-2:1:-1]
+status = exeLOG.values.T[2].tolist()[-2:1:-1]
+task = exeLOG.values.T[1].tolist()[-2:1:-1]
+timeStamp = exeLOG.values.T[0].tolist()[-2:1:-1]
+
+time = ErrorLog.values.T[0].tolist()[8:]
+cause = ErrorLog.values.T[4].tolist()[8:]
+
+
+for i in range(len(msg)):
+    if not fail:
+        if task[i] == "Main Job":
+            if "starting" in msg[i]:
+                if start != -1:
+                    etls += [ETL(start, i - 1)]
+                    fail = False
+                    start = -1
+
+                else:
+                    start = i
+
+            elif "finished" in msg[i]:
+                etls += [ETL(start, i)]
+                fail = False
+                start = -1
+
+        if status[i] == "FAILURE":
+            fail = True
+
+    else:
+        if task[i] == "Main Job":
+            if "starting" in msg[i]:
+                etls += [ETL(start, i - 1)]
+                fail = False
+                start = i
+                end = -1
+
+etls = etls[::-1]
+
+
+for etl in etls:
+    for i in range(len(time)):
+        if etl.log[0][0] <= time[i] and etl.log[0][-1] >= time[i]:
+            etl.err += [cause[i]]
+
 
 curMonth = etls[0].log[0][0].month
+
+
+
+
 
 
 def printToFile():
@@ -105,7 +195,7 @@ def printToFile():
             sheet1.col(4).width = (16) * 367
 
             sheet1 = log.add_sheet(months[etls[i][0][0].month])
-            nonlocal
+            #nonlocal
         print(etls[i].err)
         printETL(row, i)
 
@@ -115,6 +205,5 @@ def printToFile():
     log.save("log.xls")
 
 
-printToFile()
 
 
