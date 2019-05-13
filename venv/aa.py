@@ -65,7 +65,7 @@ class ETL :
         self.flags = self.getFlags()
         self.err=[]
 
- 
+
     def getMat(self , start , end):
         self.log+= [timeStamp[start : end+1]]
         for i in range(len(self.log[0])):
