@@ -24,6 +24,9 @@ df = pd.read_excel('Execution Log.xlsx', sheet_name = my_sheet_name)
 log = open ("ETL.log",'r')
 setupDWH = open("CheckApps.txt","r").readlines()
 
+
+
+
 dwh = setupDWH[3].split()[2][1:-1]
 ver = setupDWH[9].split()[1]
 fix = "None"

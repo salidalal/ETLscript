@@ -85,6 +85,7 @@ def printToFile():
                 sheet1.write(p, 3, str(etls[etl].log[2][i]), xlwt.easyxf('pattern: pattern solid, fore_colour yellow;'
                                                                          'font: colour black, bold True;'
                                                                          'align: horiz center'))
+
             elif etls[etl].log[2][i] == "FAILURE":
                 sheet1.write(p, 3, str(etls[etl].log[2][i]), fail)
             elif etls[etl].log[2][i] == "SUCCESS":
@@ -105,7 +106,6 @@ def printToFile():
             sheet1.col(4).width = (16) * 367
 
             sheet1 = log.add_sheet(months[etls[i][0][0].month])
-            nonlocal
         print(etls[i].err)
         printETL(row, i)
 
