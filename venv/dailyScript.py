@@ -1,10 +1,12 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
+# coding: utf-8
 from datetime import datetime
 import xlwt
 import functools
 from dailyScriptDefines import *
 import os
+
+
 
 
 #./collectLIDetails.sh

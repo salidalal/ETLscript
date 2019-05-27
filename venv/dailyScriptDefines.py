@@ -148,11 +148,11 @@ class Environment:
 
     @property
     def isPass(self):
-        return self.sortETL()[-1][1][1]
+        return self.sortETL()[-1][1][1] == "SUCCESS" and self.sortETL()[0][1][0] == "MAIN JOB"
 
     def warning(self):
         for row in self.sortETL():
-            if row[1][1]!="START" and row[1][1]!="SUCCESS":
+            if row[1][1]!="WARNING":
                 return true
         return false
 
@@ -161,72 +161,91 @@ class Environment:
 
 
 
-        row = 3
+        row = 1
         col = 0
 
-        #obi prints
-        sheet.write(row, col, "OBI: ", titleStyle)
-        sheet.write(row, col+1, "Host Name: ", titleStyle)
-        sheet.write(row, col + 2, self.getOBIhost, style)
-        sheet.write(row, col + 3, "OBI Version: ", titleStyle)
-        sheet.write(row, col + 4, self.getOBIver, style)
-        sheet.write(row, col + 5, "OBI Fix: ", titleStyle)
-        sheet.write(row, col + 6, self.getOBIFix, style)
-        sheet.write(row, col + 7, "ECILobieeInst1: ", titleStyle)
-        sheet.write(row, col + 8, self.getObieeInst1, style)
-        sheet.write(row, col + 9, "ECILobieeInst2: ", titleStyle)
-        sheet.write(row, col + 10, self.getObieeInst2, style)
-
-        row = 5
 
 
-        #dwh prints
-        sheet.write(row, col, "DWH: ", titleStyle)
-        sheet.write(row, col+1, "Host Name: ", titleStyle)
-        sheet.write(row, col + 2, self.getDWHhost, style)
-        sheet.write(row, col + 3, "OBI Version: ", titleStyle)
-        sheet.write(row, col + 4, self.getDWHver, style)
-        sheet.write(row, col + 5, "OBI Fix: ", titleStyle)
-        sheet.write(row, col + 6, self.getDWHFix, style)
 
-        row = 7
+
+
+
+
+        sheet.write(row, col, "OBI Host Name: ", titleStyle)
+        sheet.write(row + 1, col, self.getOBIhost, style)
+        sheet.write(row, col+1, "DWH Host Name: ", titleStyle)
+        sheet.write(row + 1, col + 1, self.getDWHhost, style)
+        sheet.write(row, col+2, "Last ETL status: ", titleStyle)
+
+
+        if(self.warning and self.isPass):
+            sheet.write(row + 1, col + 2, "SUCCESS with WARNING", succ)
+        elif (self.isPass):
+            sheet.write(row + 1, col + 2, "ETL SUCCESS", succ)
+        else:
+            sheet.write(row + 1, col + 2, "ETL Failed", fail)
+
+        col+=3
+        sheet.write(row, col, "Starting time: ", titleStyle)
+        sheet.write(row + 1, col, str(self.getETLStart)[:19], style)
+        sheet.write(row, col + 1, "Total time: ", titleStyle)
+        sheet.write(row + 1, col + 1, str(self.etlTime)[:7], style)
+        sheet.write(row, col + 2, "OBI / DWH Version: ", titleStyle)
+        if (self.getDWHver!=self.getOBIver):
+            sheet.write(row + 1, col + 2, self.getOBIver + "/" + self.getDWHver, style)
+        else:
+            sheet.write(row + 1, col + 2, self.getOBIver, style)
+
+        sheet.write(row, col + 3, "OBI Fix: ", titleStyle)
+        sheet.write(row + 1, col + 3, self.getOBIFix, style)
+        sheet.write(row, col + 4, "DWH Fix: ", titleStyle)
+        sheet.write(row + 1, col + 4, self.getDWHFix, style)
+
+        col+=5
+        """
+        sheet.write(row, col + 5, "ECILobieeInst1: ", titleStyle)
+        sheet.write(row + 1, col + 5, self.getObieeInst1, style)
+        sheet.write(row, col + 6, "ECILobieeInst2: ", titleStyle)
+        sheet.write(row + 1, col + 6, self.getObieeInst2, style)
+        col +=2
+        """
 
 
         #flags
-        sheet.write(row , col, "Flags: ", titleStyle)
-        sheet.write(row, col + 1, "Inc Load : ", titleStyle)
-        sheet.write(row, col + 2, self.getInc, style)
-        sheet.write(row, col + 3, "Failure Management: ", titleStyle)
-        sheet.write(row, col + 4, self.getFailMng, style)
-        sheet.write(row, col + 5, "Skip Mode: ", titleStyle)
-        sheet.write(row, col + 6, self.getSkip, style)
-        sheet.write(row, col + 7, "Skip Mode: ", titleStyle)
-        sheet.write(row, col + 8, self.getSkip, style)
-        sheet.write(row, col + 9, "Transfer Only: ", titleStyle)
-        sheet.write(row, col + 10, self.getTO, style)
-        sheet.write(row+1, col , "mirror DB params: ", titleStyle)
-        sheet.write(row+1, col + 1, self.getParams, style)
+        sheet.write(row, col, "Incremental mode : ", titleStyle)
+        sheet.write(row + 1, col, self.getInc, style)
+        sheet.write(row, col + 1, "Failure Management: ", titleStyle)
+        sheet.write(row + 1, col + 1, self.getFailMng, style)
+        sheet.write(row, col + 2, "Skip Mode: ", titleStyle)
+        sheet.write(row + 1, col + 2, self.getSkip, style)
+        sheet.write(row, col + 3, "Recovery Mode: ", titleStyle)
+        sheet.write(row + 1, col + 3, self.getRecovery, style)
+        sheet.write(row, col + 4, "Transfer Only: ", titleStyle)
+        sheet.write(row + 1, col + 4, self.getTO, style)
+        sheet.write(row, col + 5 , "mirror DB params: ", titleStyle)
+        sheet.write(row+1, col + 5, self.getParams, style)
 
-        row=11
-        sheet.write(row , col, "ETL: ", titleStyle)
-        sheet.write(row, col + 2, "Starting time: ", titleStyle)
-        sheet.write(row, col + 3, str(self.getETLStart)[:19], style)
-        sheet.write(row, col + 4, "Ending time: ", titleStyle)
-        sheet.write(row, col + 5, str(self.getETLEnd)[:19], style)
-        sheet.write(row, col + 6, "Total time: ", titleStyle)
-        sheet.write(row, col + 7, str(self.etlTime)[:7], style)
 
-        if(self.isPass =="SUCCESS"):
-            sheet.write(row, col + 1,self.isPass, succ)
-        else:
-            sheet.write(row, col + 1,"ETL Failed", fail)
 
-        row+=1
+
+
+        row+=3
+        sheet.write(row, 1, "Job Name: ", titleStyle)
+        sheet.write(row, 2, "Status: ", titleStyle)
+        sheet.write(row, 3, "Massages: ", titleStyle)
+        sheet.write(row, 4, "Job total time: ", titleStyle)
         for r in self.sortETL():
-            sheet.write(row, col+1, r[1][0], style)
-            sheet.write(row, col + 2, r[1][1], style)
-            sheet.write(row, col + 3, r[1][2], style)
+            sheet.write(row+1, 1, r[1][0], style) #job name
+            sheet.write(row+1, 2, r[1][1], style) # status
+            sheet.write(row+1, 3, r[1][2], style) # msg
+
+            if r[1][1] == "SUCCESS":
+                for s in self.sortETL():
+                    if s[1][0] == r[1][0]:
+                        sheet.write(row+1, 4, str(calcTime(s[0], r[0])), style)  # total time
+                        break
             row+=1
 
-        for i in range(12):
+
+        for i in range(20):
             sheet.col(i).width = (15) * 367
