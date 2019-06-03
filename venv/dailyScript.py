@@ -25,8 +25,6 @@ for filename in os.listdir(dirc):
 
 
 
-
-
 outputLog = xlwt.Workbook(encoding="utf-8")
 
 for env in environments:
@@ -34,5 +32,5 @@ for env in environments:
 
 
 
-now = datetime.datetime.now().strftime("%d.%m") + "-Etl analyse.xls"
-outputLog.save(now)
+now = datetime.datetime.now().strftime("%d.%m - %b.xls")
+outputLog.save("C:/Users/sdalal/OneDrive - ECI Telecom LTD/PycharmProjects/untitled/venv/logs/"+now)
