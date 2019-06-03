@@ -15,7 +15,7 @@ environments=[]
 
 
 
-dirc = "//netstore2/sdh_tst_pub/TamarS/LIreport"
+dirc =  "//netstore2/sdh_tst_pub/TamarS/LIreport"
 
 
 for filename in os.listdir(dirc):
