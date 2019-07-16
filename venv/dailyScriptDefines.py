@@ -45,7 +45,7 @@ class Environment:
         self.envfile = envfil
 
     ######### DWH #########
-    @property
+    @propertymay
     def getDWHhost(self):
         for line in self.envfile:
             if "DWH hostname" in line:

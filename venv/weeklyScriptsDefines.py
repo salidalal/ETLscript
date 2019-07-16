@@ -69,6 +69,8 @@ def printToFile(outputLog,envName,envLogs,month):
     row = 0
     col = 0
 
+    print(envLogs)
+
     sheet.write(row, col, "OBI Host Name: ", titleStyle)
     sheet.write(row + 1, col, envLogs[envName][0][0], style)
     sheet.write(row, col + 1, "DWH Host Name: ", titleStyle)
