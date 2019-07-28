@@ -2,6 +2,7 @@
 
 import xlwt
 import datetime
+from datetime import timedelta
 
 style = xlwt.easyxf('align: horiz center')
 succ = xlwt.easyxf('pattern: pattern solid, fore_colour green;'
@@ -37,7 +38,14 @@ mirror = {"-q": "quiet mode",
 
 
 def calcTime(start, end):
-    return end - start
+
+
+    e=(end-start)
+
+    #e.hour += e.days*24
+    print(e)
+
+    return e
 
 
 class Environment:
@@ -227,7 +235,7 @@ class Environment:
         sheet.write(row, col, "Starting time: ", titleStyle)
         sheet.write(row + 1, col, str(self.getETLStart)[:19], style)
         sheet.write(row, col + 1, "Total time: ", titleStyle)
-        sheet.write(row + 1, col + 1, str(self.etlTime)[:7], style)
+        sheet.write(row + 1, col + 1, str(self.etlTime), style)
         sheet.write(row, col + 2, "OBI / DWH Version: ", titleStyle)
 
         if (self.getDWHver != self.getOBIver):

@@ -3,7 +3,7 @@
 from datetime import datetime
 from xlutils.copy import copy
 import xlrd
-from weeklyScriptsDefines import *
+from monthlyScriptsDefines import *
 import os
 
 

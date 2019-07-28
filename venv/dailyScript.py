@@ -33,4 +33,6 @@ for env in environments:
 
 
 now = datetime.datetime.now().strftime("%d.%m - %b.xls")
+
+print("C:/Users/sdalal/OneDrive - ECI Telecom LTD/PycharmProjects/untitled/venv/logs/"+now)
 outputLog.save("C:/Users/sdalal/OneDrive - ECI Telecom LTD/PycharmProjects/untitled/venv/logs/"+now)

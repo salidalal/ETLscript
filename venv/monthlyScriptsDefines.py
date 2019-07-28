@@ -31,14 +31,8 @@ def addToList(file,envList):
 
 def calcAvg(envList):
 
-    def convert(seconds):
-        seconds = seconds % (24 * 3600)
-        hour = seconds // 3600
-        seconds %= 3600
-        minutes = seconds // 60
-        seconds %= 60
-
-        return "%d:%02d:%02d" % (hour, minutes, seconds)
+    def convert(secs):
+        return str(timedelta(seconds=secs))
 
 
     totalTime= timedelta()
@@ -47,18 +41,29 @@ def calcAvg(envList):
     counterFailed = 0
 
     for day in envList:
+
         if("SUCCESS" in day[2]):
             counterSucc+=1
+            d=0
+            print("lalalal    "+day[4])
+            if "day" in day[4]:
+                d=int(day[4].split()[0])
+                day[4] = day[4].split(',')[1][1:]
+
+
             (h,m,s) = day[4].split(':')
+            h = str(int(h) + d*24)
+            s=(s.split('.')[0])
             time += int(s)+ int(m)*60 + int(h)*60*60
             totalTime += timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-        else:
+
+        elif "Failed" in day[2]:
             counterFailed+=1
     avg = 0
     if counterSucc>0:
         #print(totalTime)
         avg = totalTime.total_seconds()/(counterSucc)
-        #print(avg)
+        print(avg)
         print(convert(avg))
     return (convert(avg), counterSucc, counterFailed)
 
