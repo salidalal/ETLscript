@@ -93,6 +93,20 @@ def printToFile(outputLog,envName,envLogs,month):
     sheet.write(row + 1, col + 4, calc[2], style)
 
 
+    row+=3
+
+    sheet.write(row , col, "Starting time: ", titleStyle)
+    sheet.write(row , col + 1, "Status: ", titleStyle)
+    sheet.write(row , col + 2, "Total time: ", titleStyle)
+    sheet.write(row , col + 3, "OBI\DWH ver: ", titleStyle)
+
+    for i in range(len(envLogs[envName])-1):
+        sheet.write(row + i + 1, col, envLogs[envName][i][3], style)
+        sheet.write(row + i + 1, col + 1, envLogs[envName][i][2], style)
+        sheet.write(row + i + 1, col + 2, envLogs[envName][i][4], style)
+        sheet.write(row + i + 1, col + 3, envLogs[envName][i][5], style)
+
+
     #settings cols size
     for i in range(6):
         sheet.col(i).width = (15) * 367
