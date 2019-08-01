@@ -4,6 +4,7 @@ from datetime import datetime
 import xlwt
 import functools
 from dailyScriptDefines import *
+from sendMail import *
 import os
 
 
@@ -36,3 +37,6 @@ now = datetime.datetime.now().strftime("%d.%m - %b.xls")
 
 print("C:/Users/sdalal/OneDrive - ECI Telecom LTD/PycharmProjects/untitled/venv/logs/"+now)
 outputLog.save("C:/Users/sdalal/OneDrive - ECI Telecom LTD/PycharmProjects/untitled/venv/logs/"+now)
+
+
+sendMail()

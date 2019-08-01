@@ -213,7 +213,10 @@ class Environment:
         return False
 
     def printToFile(self, outputLog):
-        sheet = outputLog.add_sheet(self.getOBIhost)
+        try:
+            sheet = outputLog.add_sheet(self.getOBIhost)
+        except:
+            sheet = outputLog.add_sheet(self.getOBIhost+"2")
 
         row = 0
         col = 0

@@ -45,7 +45,6 @@ def calcAvg(envList):
         if("SUCCESS" in day[2]):
             counterSucc+=1
             d=0
-            print("lalalal    "+day[4])
             if "day" in day[4]:
                 d=int(day[4].split()[0])
                 day[4] = day[4].split(',')[1][1:]
@@ -63,8 +62,7 @@ def calcAvg(envList):
     if counterSucc>0:
         #print(totalTime)
         avg = totalTime.total_seconds()/(counterSucc)
-        print(avg)
-        print(convert(avg))
+
     return (convert(avg), counterSucc, counterFailed)
 
 def printToFile(outputLog,envName,envLogs,month):
@@ -73,8 +71,6 @@ def printToFile(outputLog,envName,envLogs,month):
     sheet = outputLog.add_sheet(envName+" analysis")
     row = 0
     col = 0
-
-    print(envLogs)
 
     sheet.write(row, col, "OBI Host Name: ", titleStyle)
     sheet.write(row + 1, col, envLogs[envName][0][0], style)
