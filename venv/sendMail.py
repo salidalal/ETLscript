@@ -12,14 +12,13 @@ attachment = filename
 
 def sendMail():
     for mailadd in mailList:
-        print("1")
         print(mailadd)
 
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
         mail.Subject = 'Etl daily report'+now
         mail.Body = 'daily etl report'
-        # To attach a file to the email (optional):
+        # To attach a file to the email):
         mail.Attachments.Add(attachment)
         mail.To = str(mailadd)
         mail.Send()
