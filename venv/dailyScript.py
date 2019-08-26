@@ -11,6 +11,8 @@ import os
 
 
 
+
+
 #./collectLIDetails.sh
 environments=[]
 

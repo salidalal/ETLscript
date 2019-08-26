@@ -8,6 +8,9 @@ style = xlwt.easyxf('align: horiz center')
 succ = xlwt.easyxf('pattern: pattern solid, fore_colour green;'
                    'font: colour white, bold True;'
                    'align: horiz center')
+warr = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;'
+                   'font: colour black, bold True;'
+                   'align: horiz center')
 fail = xlwt.easyxf('pattern: pattern solid, fore_colour red;'
                    'font: colour white, bold True;'
                    'align: horiz center')
@@ -43,8 +46,6 @@ def calcTime(start, end):
     e=(end-start)
 
     #e.hour += e.days*24
-    print(e)
-
     return e
 
 
@@ -189,6 +190,10 @@ class Environment:
         return self.sortETL()[-1][1][1] == "SUCCESS" and self.sortETL()[0][1][0] == "MAIN JOB"
 
     @property
+    def isNotDone(self):
+        return self.sortETL()[-1][1][0] != "MAIN JOB"
+
+    @property
     def getNMS(self):
         for i in range(len(self.envfile)):
             if "NMS_IP" in self.envfile[i]:
@@ -227,8 +232,10 @@ class Environment:
         sheet.write(row + 1, col + 1, self.getDWHhost, style)
         sheet.write(row, col + 2, "Last ETL status: ", titleStyle)
 
-        if (self.warning() and self.isPass):
-            sheet.write(row + 1, col + 2, "SUCCESS with WARNING", succ)
+        if self.isNotDone:
+            sheet.write(row + 1, col + 2, "ETL is not done!", warr)
+        elif (self.warning() and self.isPass):
+            sheet.write(row + 1, col + 2, "SUCCESS with WARNING", warr)
         elif (self.isPass):
             sheet.write(row + 1, col + 2, "ETL SUCCESS", succ)
         else:
@@ -288,6 +295,8 @@ class Environment:
             sheet.write(row + 1, 2, r[1][1], style)  # status
             sheet.write(row + 1, 3, r[1][2], style)  # msg
 
+
+
             if r[1][1] == "SUCCESS":
                 for s in self.sortETL():
                     if s[1][0] == r[1][0]:
@@ -295,7 +304,7 @@ class Environment:
                         break
             row += 1
 
-
+        self.isNotDone
         #settings cols size
         for i in range(20):
             sheet.col(i).width = (15) * 367
