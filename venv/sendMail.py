@@ -16,7 +16,7 @@ def sendMail():
 
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.Subject = 'Etl daily report'+now
+        mail.Subject = 'Etl daily report '+now
         mail.Body = 'daily etl report'
         # To attach a file to the email):
         mail.Attachments.Add(attachment)
