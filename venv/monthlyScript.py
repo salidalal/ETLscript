@@ -40,6 +40,7 @@ def monthly():
     #calling print to file for each sheet ( each shhet for each env)
     for env in environmentsLogs:
         print(env)
-        printToFile(outputLog, env, environmentsLogs, cur_month)
+        if len(environmentsLogs[env])>0:
+            printToFile(outputLog, env, environmentsLogs, cur_month)
 
     outputLog.save("C:/Users/sdalal/OneDrive - ECI Telecom LTD/PycharmProjects/untitled/venv/logs/" + cur_month+".xls")

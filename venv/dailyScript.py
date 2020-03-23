@@ -23,7 +23,7 @@ dirc = "//netstore2/sdh_tst_pub/TamarS/LIreport"
 
 
 for filename in os.listdir(dirc):
-    if filename.endswith("txt"):
+    if filename.endswith("txt") and "integration" not in filename:
         with open (os.path.join(dirc, filename)) as f:
             environments+=[Environment(f.read().splitlines())]
 
@@ -44,3 +44,4 @@ outputLog.save("C:/Users/sdalal/OneDrive - ECI Telecom LTD/PycharmProjects/untit
 
 sendMail()
 monthly()
+
